@@ -1,22 +1,26 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { LandingPage } from '@/pages/LandingPage';
-import { Navigation } from '@/Navigation';
-import { Providers } from '@/Providers';
-import { LoginPage } from '@/pages/LoginPage';
-import { SignupPage } from '@/pages/SignupPage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HomePage, NotFound, Login, Signup, Dashboard, Documents, MedicalRecords, Prescriptions, Appointments, Messaging } from '@/pages'
+import { Navigation } from '@/Navigation'
+import { Providers } from '@/Providers'
 
-export const App = () => (
-  <BrowserRouter>
-    <Providers>
-      <Navigation />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        {/* Placeholder routes for nav */}
-        <Route path="/about" element={<div className="p-16 text-center text-2xl">About page coming soon...</div>} />
-        <Route path="/features" element={<div className="p-16 text-center text-2xl">Features page coming soon...</div>} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-      </Routes>
-    </Providers>
-  </BrowserRouter>
-);
+export function App() {
+  return (
+    <BrowserRouter>
+      <Providers>
+        <Navigation />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/documents" element={<Documents />} />
+          <Route path="/medical-records" element={<MedicalRecords />} />
+          <Route path="/prescriptions" element={<Prescriptions />} />
+          <Route path="/appointments" element={<Appointments />} />
+          <Route path="/messaging" element={<Messaging />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Providers>
+    </BrowserRouter>
+  )
+}

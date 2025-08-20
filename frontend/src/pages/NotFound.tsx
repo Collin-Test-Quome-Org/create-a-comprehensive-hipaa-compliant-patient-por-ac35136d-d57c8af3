@@ -4,15 +4,14 @@ import { motion } from 'framer-motion'
 
 export function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-100">
-      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5 }} className="text-center">
-        <img src="/branding/assets/logo-1.png" className="mx-auto w-24 h-24 mb-8" />
-        <h1 className="text-5xl font-bold mb-4 text-blue-900" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}>Whoops! Page not found.</h1>
-        <p className="text-lg text-slate-700 mb-8">Looks like you wandered off the secure path. No worries—let's get you back home!</p>
-        <Button asChild size="lg" className="px-8 py-6" id="notfound-home-btn">
-          <Link to="/">Return to Home</Link>
-        </Button>
-      </motion.div>
-    </div>
+    <motion.div className="flex flex-col items-center justify-center min-h-[80vh] bg-[#cbd5e1] px-4"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <img src="/branding/assets/logo-2.png" className="w-20 mb-6" />
+      <h1 className="text-5xl font-bold text-[#1d4ed8] mb-4 font-['Roboto']">404</h1>
+      <p className="text-xl text-gray-700 mb-8 font-['Roboto']">Oops! The page you're seeking isn't here.<br />But MedLock always guides you back to care.</p>
+      <Button asChild id="notfound-home" className="bg-[#1d4ed8] hover:bg-blue-800">
+        <Link to="/">Go Home</Link>
+      </Button>
+    </motion.div>
   )
 }
