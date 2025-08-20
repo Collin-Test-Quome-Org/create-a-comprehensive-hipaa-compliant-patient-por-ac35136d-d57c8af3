@@ -2,46 +2,25 @@ import { motion } from 'framer-motion';
 
 export function About() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-3xl mx-auto py-16 px-4">
-        <motion.h1
-          initial={{ opacity: 0, x: -60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-          className="text-4xl font-bold mb-6 text-blue-900"
-          style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}
-        >
-          About Medivault
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-lg text-gray-700 mb-4"
-          style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 400 }}
-        >
-          Medivault is your personal healthcare fortress—built by a team of privacy enthusiasts and tech optimists. We believe in empowering patients with full control over their medical data, while making it easy to connect and collaborate with your care team.
-        </motion.p>
-        <motion.p
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg text-gray-700 mb-4"
-        >
-          Our mission: Make healthcare data management effortless, private, and delightful. We design with accessibility at heart, security in every byte, and a dash of Medivault charm.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-8 flex items-center gap-4"
-        >
-          <img src="/branding/assets/logo-0.png" className="h-16" />
-          <span className="text-2xl text-blue-800 font-bold" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}>
-            Medivault: Your Health, Your Rules
-          </span>
-        </motion.div>
-      </div>
+    <div className="min-h-screen w-full bg-gradient-to-b from-slate-50 via-white to-slate-100 pt-16">
+      <motion.div
+        className="max-w-3xl mx-auto px-6 py-16"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7 }}
+      >
+        <h1 className="text-4xl font-bold mb-6 font-['Roboto'] text-blue-900">Meet HealthLock</h1>
+        <p className="text-lg text-slate-700 mb-6 font-['Roboto']">
+          HealthLock is your digital health vault—built for patients and families who want their medical information safe, simple, and always at hand. Our mission is to put you in control of your care experience, from scheduling to secure messaging and beyond.
+        </p>
+        <p className="text-lg text-slate-700 mb-6">
+          Our approach: modern security and privacy, with a delightfully human touch. We believe your health journey deserves clarity, confidence, and a little spark of joy. That’s why we obsess over every detail—from our encrypted records to our gentle reminders and intuitive workflows.
+        </p>
+        <p className="text-lg text-slate-700">
+          <span className="font-semibold text-blue-800">Who is HealthLock for?</span><br />
+          Anyone seeking a better, safer way to manage their health. Whether you’re managing chronic conditions, handling your family’s care, or simply want to keep your records organized—HealthLock is here to help.
+        </p>
+      </motion.div>
     </div>
   );
 }
