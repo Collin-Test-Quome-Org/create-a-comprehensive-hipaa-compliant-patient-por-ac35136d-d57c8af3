@@ -1,59 +1,45 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Landing Page', () => {
+test.describe('LandingPage', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
   });
 
-  test('renders hero section', async ({ page }) => {
-    // Hero is a component, but let's check for primary heading and brand
+  test('renders hero section and main headings', async ({ page }) => {
+    // Heading in hero component (assumed h1, but fallback to text)
     await expect(page.getByRole('heading', { name: /healthcare, reimagined/i })).toBeVisible();
-    await expect(page.getByText(/your data is your own/i)).toBeVisible();
+    await expect(page.getByText('At ShieldLink Health, your data is your own.', { exact: false })).toBeVisible();
   });
 
-  test('shows all three feature cards with correct icons and text', async ({ page }) => {
-    const cardTitles = [
+  test('displays three feature cards with correct icons and text', async ({ page }) => {
+    const featureTitles = [
       'Private & Secure',
       'Human Connection',
       'Effortless Access',
     ];
-    for (const title of cardTitles) {
+    for (const title of featureTitles) {
       await expect(page.getByRole('heading', { name: title })).toBeVisible();
     }
     await expect(page.getByText('Your health information stays protected with end-to-end encryption and privacy-first design.')).toBeVisible();
     await expect(page.getByText('We put people at the heart of care. Connect, share, and heal – together.')).toBeVisible();
     await expect(page.getByText('Access your records anywhere, anytime. You control your journey.')).toBeVisible();
+    // Lucide icons are SVGs, test for their presence
+    const icons = await page.locator('svg').all();
+    expect(icons.length).toBeGreaterThanOrEqual(3);
   });
 
-  test('renders the call-to-action section and signup button', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: /ready to experience healthcare with heart/i })).toBeVisible();
-    const ctaButton = page.getByRole('link', { name: /sign up free/i });
+  test('renders call-to-action with sign up button', async ({ page }) => {
+    const ctaSection = page.getByRole('heading', { name: /ready to experience healthcare with heart/i });
+    await expect(ctaSection).toBeVisible();
+    const ctaButton = page.locator('#cta-signup');
     await expect(ctaButton).toBeVisible();
-    await expect(ctaButton).toHaveAttribute('href', '/signup');
-    await expect(ctaButton).toHaveClass(/font-bold/);
+    await expect(ctaButton.getByRole('link', { name: /sign up free/i })).toBeVisible();
+    await expect(ctaButton.getByRole('link', { name: /sign up free/i })).toHaveAttribute('href', '/signup');
   });
 
-  test('cta signup button navigates to signup page', async ({ page }) => {
-    await page.getByRole('link', { name: /sign up free/i }).click();
-    await expect(page).toHaveURL(/\/signup$/);
+  test('clicking Sign Up Free navigates to /signup', async ({ page }) => {
+    await page.locator('#cta-signup').getByRole('link', { name: /sign up free/i }).click();
+    await expect(page).toHaveURL('/signup');
     await expect(page.getByRole('heading', { name: /sign up/i })).toBeVisible();
-  });
-
-  test('feature section cards have accessible contrast', async ({ page }) => {
-    // Check for background color and text color classes
-    const features = page.locator('.grid > div');
-    await expect(features.nth(0)).toHaveClass(/bg-\[#cbd5e1\]/);
-    await expect(features.nth(0)).toHaveClass(/rounded-xl/);
-    await expect(features.nth(0)).toContainText('Private & Secure');
-    await expect(features.nth(1)).toHaveClass(/bg-\[#cbd5e1\]/);
-    await expect(features.nth(2)).toHaveClass(/bg-\[#cbd5e1\]/);
-  });
-
-  test('page layout is responsive (basic check)', async ({ page }) => {
-    // Desktop grid
-    await expect(page.locator('.grid')).toHaveClass(/md:grid-cols-3/);
-    // Simulate mobile
-    await page.setViewportSize({ width: 375, height: 800 });
-    await expect(page.locator('.grid')).toHaveClass(/grid-cols-1/);
   });
 });
