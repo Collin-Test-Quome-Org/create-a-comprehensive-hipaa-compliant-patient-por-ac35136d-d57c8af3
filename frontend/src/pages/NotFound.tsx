@@ -1,20 +1,26 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Frown } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ShieldOff } from 'lucide-react';
 
 export function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#f3f6fa]">
-      <div className="flex flex-col items-center p-8 bg-white rounded-xl shadow-xl">
-        <Frown className="text-[#1d4ed8] w-16 h-16 mb-4" />
-        <h1 className="text-3xl font-bold mb-2" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}>404 - Page Not Found</h1>
-        <p className="mb-6 text-gray-700">Sorry, the page you requested doesn't exist on TrustLink Health.</p>
-        <Link to="/">
-          <Button id="not-found-home-btn" className="bg-[#1d4ed8] text-white font-semibold px-6 py-2 text-lg hover:bg-blue-700">
-            Go Home
-          </Button>
-        </Link>
-      </div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100">
+      <motion.div
+        initial={{ scale: 0.7, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col items-center justify-center bg-white p-10 rounded-xl shadow-lg"
+      >
+        <ShieldOff size={56} className="text-[#1d4ed8] mb-4" />
+        <h1 className="text-3xl font-bold text-blue-900 mb-2" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}>404: Page Not Found</h1>
+        <p className="text-gray-700 text-lg mb-6" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 400 }}>
+          Oops! The page you're looking for is in another vault.
+        </p>
+        <Button id="back-to-home" asChild className="bg-[#1d4ed8] hover:bg-blue-900">
+          <Link to="/">Return Home</Link>
+        </Button>
+      </motion.div>
     </div>
   );
 }
