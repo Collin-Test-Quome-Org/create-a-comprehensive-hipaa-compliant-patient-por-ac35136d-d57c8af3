@@ -1,27 +1,20 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { Skeleton } from '@/components/ui/skeleton'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { LandingPage } from '@/pages/LandingPage';
+import { Navigation } from '@/Navigation';
+import { Providers } from '@/Providers';
 
-export function App() {
-  return (
-    <Router>
+export const App = () => (
+  <BrowserRouter>
+    <Providers>
+      <Navigation />
       <Routes>
-        <Route path="/" element={
-          <div className="text-center mx-auto my-10 w-screen">
-            <h1>We are building your app...</h1>
-            <p className="read-the-docs mx-auto">
-              <div className="my-8 items-center flex flex-col space-y-3 animate-pulse">
-                <Skeleton className="h-[125px] w-[250px] rounded-xl" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px]" />
-                  <Skeleton className="h-4 w-[200px]" />
-                </div>
-              </div>
-              Just a moment. You should see updates shortly.
-            </p>
-          </div>
-        } />
+        <Route path="/" element={<LandingPage />} />
+        {/* Placeholder routes for nav */}
+        <Route path="/about" element={<div className="p-16 text-center text-2xl">About page coming soon...</div>} />
+        <Route path="/features" element={<div className="p-16 text-center text-2xl">Features page coming soon...</div>} />
+        <Route path="/login" element={<div className="p-16 text-center text-2xl">Login page coming soon...</div>} />
+        <Route path="/signup" element={<div className="p-16 text-center text-2xl">Signup page coming soon...</div>} />
       </Routes>
-    </Router>
-  )
-}
-export default App
+    </Providers>
+  </BrowserRouter>
+);
