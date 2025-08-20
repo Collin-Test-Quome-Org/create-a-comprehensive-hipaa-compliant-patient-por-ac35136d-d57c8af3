@@ -1,18 +1,37 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Ghost } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-slate-100">
-      <div className="flex flex-col items-center gap-4 p-8 rounded-xl shadow bg-white">
-        <Ghost size={48} className="text-blue-700 mb-2" />
-        <h1 className="text-3xl font-bold mb-2 font-['Roboto']">Page Not Found</h1>
-        <p className="text-slate-600 mb-4">Oops! The page you’re seeking is locked away or doesn’t exist.</p>
-        <Button asChild id="notfound-back-home">
-          <Link to="/">Return to Home</Link>
-        </Button>
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 pb-24">
+      <motion.img
+        src="/branding/assets/logo-2.png"
+        className="w-28 h-28 mb-8 mt-24"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      />
+      <motion.h1
+        className="text-5xl font-extrabold font-['Roboto'] text-blue-700 mb-4"
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        404
+      </motion.h1>
+      <motion.p
+        className="text-xl text-slate-600 mb-8 font-['Roboto']"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3 }}
+      >
+        Oops! The page you’re seeking doesn’t exist. <br />
+        You are always safe with SecureMed.
+      </motion.p>
+      <Button asChild id="notfound-home-btn" className="bg-blue-700 hover:bg-blue-800 text-white">
+        <Link to="/">Return Home</Link>
+      </Button>
     </div>
   );
 }

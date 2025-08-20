@@ -1,93 +1,88 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { MoveRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const heroImage = '/branding/assets/hero-0.png';
-const logo = '/branding/assets/logo-0.png';
 
 export function Home() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-white via-slate-100 to-slate-200">
+    <div className="min-h-screen bg-slate-50">
       <div
-        style={{ backgroundImage: `url('${heroImage}')` }}
-        className="bg-cover bg-center h-[28rem] relative flex items-center justify-center"
+        style={{ backgroundImage: "url('/branding/assets/hero-0.png')" }}
+        className="bg-cover bg-center h-[34rem] relative"
       >
-        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center">
-          <motion.img
-            src={logo}
-            className="mb-6 w-28 drop-shadow-xl"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          />
-          <motion.h1
-            className="text-white text-5xl font-bold tracking-tight mb-4 font-['Roboto']"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.7 }}
-          >
-            HealthLock: Your Gateway to Secure Medical Care
-          </motion.h1>
-          <motion.p
-            className="text-white text-lg max-w-xl mb-8 text-center font-['Roboto']"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.7 }}
-          >
-            Welcome to HealthLock — where peace of mind meets modern medicine. Effortlessly manage your health records, appointments, and messages, all secured like your most precious secrets.
-          </motion.p>
+        <div className="bg-black bg-opacity-50 h-full flex flex-col items-center justify-center">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            className="flex gap-6"
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center px-4"
           >
-            <Button asChild id="get-started-cta" size="lg" className="text-lg px-8 font-bold shadow-lg">
-              <Link to="/signup" className="flex items-center gap-2">
-                Get Started <MoveRight size={20} />
-              </Link>
-            </Button>
-            <Button asChild id="learn-more-cta" size="lg" variant="secondary" className="text-lg px-8 font-bold">
-              <Link to="/login">Log In</Link>
-            </Button>
+            <img src="/branding/assets/logo-0.png" className="mx-auto mb-8 w-28 h-28 drop-shadow-lg" />
+            <h1 className="text-white text-5xl font-extrabold tracking-tight font-['Roboto']" style={{ fontWeight: 700 }}>
+              Welcome to SecureMed Portal
+            </h1>
+            <p className="text-slate-200 text-lg mt-4 max-w-2xl mx-auto font-['Roboto']" style={{ fontWeight: 400 }}>
+              Your hub for effortless, secure healthcare connections.<br />
+              Access records, manage appointments, and message your care team with total peace of mind.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild id="cta-signup" size="lg" className="bg-blue-700 hover:bg-blue-800 text-white">
+                <Link to="/signup">Get Started</Link>
+              </Button>
+              <Button asChild id="cta-login" variant="outline" size="lg" className="border-white text-white hover:bg-blue-100 hover:text-blue-900">
+                <Link to="/login">Login</Link>
+              </Button>
+            </div>
           </motion.div>
         </div>
       </div>
-      <main className="max-w-5xl mx-auto px-6 py-16">
-        <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-24"
+      <section className="flex flex-col md:flex-row justify-center gap-8 px-4 py-16 max-w-6xl mx-auto">
+        <motion.div
+          whileHover={{ y: -5, scale: 1.03 }}
+          className="bg-white rounded-xl shadow-lg p-8 flex-1 min-w-[270px] flex flex-col items-center"
         >
-          <h2 className="text-3xl font-bold font-['Roboto'] mb-6 text-blue-800">Why Choose HealthLock?</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-center hover:shadow-lg transition">
-              <span className="rounded-full bg-blue-100 p-3 mb-3">
-                <svg width="32" height="32" stroke="currentColor" fill="none" viewBox="0 0 24 24" className="text-blue-700"><path d="M12 17v.01" /><rect width="18" height="10" x="3" y="7" rx="2" /><path d="M16 3v4" /><path d="M8 3v4" /></svg>
-              </span>
-              <h3 className="font-semibold text-lg mb-2 text-slate-800">Always Secure</h3>
-              <p className="text-slate-600 text-center">Your health data is protected with industry-leading encryption and privacy-first design. No stress, no leaks, just pure security.</p>
-            </div>
-            <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-center hover:shadow-lg transition">
-              <span className="rounded-full bg-blue-100 p-3 mb-3">
-                <svg width="32" height="32" stroke="currentColor" fill="none" viewBox="0 0 24 24" className="text-blue-700"><path d="M12 8v4l3 3" /><circle cx="12" cy="12" r="10" /></svg>
-              </span>
-              <h3 className="font-semibold text-lg mb-2 text-slate-800">Effortless Access</h3>
-              <p className="text-slate-600 text-center">All your medical records, appointments, and messages are neatly organized and available whenever you need them. Never miss a beat.</p>
-            </div>
-            <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-center hover:shadow-lg transition">
-              <span className="rounded-full bg-blue-100 p-3 mb-3">
-                <svg width="32" height="32" stroke="currentColor" fill="none" viewBox="0 0 24 24" className="text-blue-700"><path d="M4 17a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V7a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4Z" /><path d="M8 9h8" /><path d="M8 13h6" /></svg>
-              </span>
-              <h3 className="font-semibold text-lg mb-2 text-slate-800">People-Centered</h3>
-              <p className="text-slate-600 text-center">We speak human. Our interface is crafted for clarity and comfort—no jargon, no guessing, just the care you deserve.</p>
-            </div>
+          <div className="bg-blue-100 p-4 rounded-full mb-4">
+            <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-blue-700"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm0 0v6m0 0-2-2m2 2 2-2" /></svg>
           </div>
-        </motion.section>
-      </main>
+          <h2 className="text-xl font-bold font-['Roboto']" style={{ fontWeight: 700 }}>Instant Access</h2>
+          <p className="text-slate-600 mt-2 text-center font-['Roboto']" style={{ fontWeight: 400 }}>
+            Securely view your health records anywhere, anytime.<br />
+            No paperwork, no delays.
+          </p>
+        </motion.div>
+        <motion.div
+          whileHover={{ y: -5, scale: 1.03 }}
+          className="bg-white rounded-xl shadow-lg p-8 flex-1 min-w-[270px] flex flex-col items-center"
+        >
+          <div className="bg-blue-100 p-4 rounded-full mb-4">
+            <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-blue-700"><path d="M5 13l4 4L19 7" /></svg>
+          </div>
+          <h2 className="text-xl font-bold font-['Roboto']" style={{ fontWeight: 700 }}>Effortless Appointments</h2>
+          <p className="text-slate-600 mt-2 text-center font-['Roboto']" style={{ fontWeight: 400 }}>
+            Book, view, and update appointments with a tap.<br />
+            Your schedule, your way.
+          </p>
+        </motion.div>
+        <motion.div
+          whileHover={{ y: -5, scale: 1.03 }}
+          className="bg-white rounded-xl shadow-lg p-8 flex-1 min-w-[270px] flex flex-col items-center"
+        >
+          <div className="bg-blue-100 p-4 rounded-full mb-4">
+            <svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-blue-700"><path d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M21 8v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8" /></svg>
+          </div>
+          <h2 className="text-xl font-bold font-['Roboto']" style={{ fontWeight: 700 }}>Private Messaging</h2>
+          <p className="text-slate-600 mt-2 text-center font-['Roboto']" style={{ fontWeight: 400 }}>
+            Chat securely with your care team.<br />
+            Your privacy is our promise.
+          </p>
+        </motion.div>
+      </section>
+      <section className="text-center py-12 bg-blue-700 text-white">
+        <h2 className="text-3xl font-bold font-['Roboto']" style={{ fontWeight: 700 }}>Why SecureMed?</h2>
+        <p className="mt-4 text-lg font-['Roboto']" style={{ fontWeight: 400 }}>
+          Because healthcare should be simple, safe, and all about you.<br />
+          Join a new era of care—where your voice is heard and your data is secure.
+        </p>
+      </section>
     </div>
   );
 }
