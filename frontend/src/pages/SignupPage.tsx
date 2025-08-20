@@ -4,60 +4,90 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { UserPlus } from 'lucide-react';
 
 export const SignupPage = () => {
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [pw, setPw] = useState('');
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    // Permissive mock signup (any data works)
     setTimeout(() => {
       setLoading(false);
-      // Mock signup: any credentials accepted
-      if (name && email && password) {
-        navigate('/dashboard');
-      } else {
-        setError('Please fill out all fields.');
-      }
-    }, 900);
+      navigate('/dashboard');
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f7fafc] py-12">
-      <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-        <Card className="w-full max-w-md shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-[#1d4ed8] font-['Roboto'] font-bold text-2xl">Sign Up for ShieldLink Health</CardTitle>
-            <p className="text-slate-600 mt-1">Create your secure account and start your health journey with confidence.</p>
+    <div className="min-h-[80vh] flex flex-col items-center justify-center bg-[#f4f8fd] py-12">
+      <motion.div
+        initial={{ opacity: 0, y: 32 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <Card className="w-full max-w-md shadow-xl border-slate-200">
+          <CardHeader className="text-center">
+            <div className="flex justify-center mb-2">
+              <UserPlus size={38} className="text-[#1d4ed8]" />
+            </div>
+            <CardTitle className="text-2xl font-bold font-['Roboto'] text-[#1d4ed8]">Create Your Account</CardTitle>
+            <p className="text-slate-600 text-sm mt-1">Begin your secure healthcare journey.</p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form className="space-y-5 mt-3" onSubmit={handleSignup}>
               <div>
-                <label htmlFor="signup-name" className="block font-semibold text-slate-800 mb-1">Full Name</label>
-                <Input id="signup-name" type="text" autoComplete="name" required value={name} onChange={e => setName(e.target.value)} placeholder="Jane Doe" />
+                <label htmlFor="signup-name" className="block text-slate-700 mb-1 font-medium">Full Name</label>
+                <Input
+                  id="signup-name"
+                  type="text"
+                  placeholder="Jane Doe"
+                  required
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
               </div>
               <div>
-                <label htmlFor="signup-email" className="block font-semibold text-slate-800 mb-1">Email</label>
-                <Input id="signup-email" type="email" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com" />
+                <label htmlFor="signup-email" className="block text-slate-700 mb-1 font-medium">Email</label>
+                <Input
+                  id="signup-email"
+                  type="email"
+                  placeholder="you@healthmail.com"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
               </div>
               <div>
-                <label htmlFor="signup-password" className="block font-semibold text-slate-800 mb-1">Password</label>
-                <Input id="signup-password" type="password" autoComplete="new-password" required value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />
+                <label htmlFor="signup-password" className="block text-slate-700 mb-1 font-medium">Password</label>
+                <Input
+                  id="signup-password"
+                  type="password"
+                  placeholder="••••••••"
+                  required
+                  value={pw}
+                  onChange={e => setPw(e.target.value)}
+                />
               </div>
-              {error && <div className="text-red-600 text-sm font-medium" id="signup-error">{error}</div>}
-              <Button id="signup-submit" type="submit" className="w-full font-bold text-lg" disabled={loading}>
-                {loading ? 'Creating account…' : 'Sign Up'}
+              {error && <div className="text-red-600 text-sm font-medium">{error}</div>}
+              <Button
+                id="signup-create-btn"
+                type="submit"
+                disabled={loading}
+                className="w-full py-2 font-bold text-lg mt-2"
+              >
+                {loading ? 'Creating Account...' : 'Sign Up'}
               </Button>
             </form>
-            <div className="mt-6 text-center text-sm">
-              <span className="text-slate-600">Already have an account?</span>{' '}
-              <Link to="/login" className="text-[#1d4ed8] font-bold hover:underline" id="signup-to-login">Sign in</Link>
+            <div className="text-center mt-6 text-sm">
+              <span className="text-slate-600">Already have an account? </span>
+              <Link to="/login" className="text-[#1d4ed8] font-semibold underline">Sign In</Link>
             </div>
           </CardContent>
         </Card>
