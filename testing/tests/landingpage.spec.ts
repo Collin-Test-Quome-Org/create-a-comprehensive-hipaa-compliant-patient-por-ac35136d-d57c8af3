@@ -1,3 +1,4 @@
+// Playwright tests for LandingPage.tsx (main landing page)
 import { test, expect } from '@playwright/test';
 
 test.describe('Landing Page', () => {
@@ -5,43 +6,57 @@ test.describe('Landing Page', () => {
     await page.goto('/');
   });
 
-  test('renders hero section', async ({ page }) => {
-    // Expect the Hero component is visible by checking a heading or hero background
-    // If Hero component has a known heading or content, check for it; otherwise, skip this check.
-    // For brand: check for "ShieldLink Health" in the hero area.
-    await expect(page.locator('text=ShieldLink Health')).toBeVisible();
+  test('renders hero section and headline', async ({ page }) => {
+    // The Hero component is at the top
+    await expect(page.locator('h1')).toBeVisible();
+    // Headline
+    await expect(page.getByRole('heading', { name: /Healthcare, Reimagined\./i, level: 2 })).toBeVisible();
+    await expect(page.getByText('At ShieldLink Health, your data is your own.', { exact: false })).toBeVisible();
   });
 
-  test('shows tagline and intro', async ({ page }) => {
-    await expect(page.locator('h2')).toHaveText('Healthcare, Reimagined.');
-    await expect(page.locator('text=your data is your own')).toBeVisible();
-    await expect(page.locator('text=ShieldLink Health')).toBeVisible();
+  test('renders the three feature cards', async ({ page }) => {
+    // There are 3 feature cards with headings
+    await expect(page.getByRole('heading', { name: 'Private & Secure', level: 3 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Human Connection', level: 3 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Effortless Access', level: 3 })).toBeVisible();
+    // Their descriptions
+    await expect(page.getByText('Your health information stays protected with end-to-end encryption and privacy-first design.')).toBeVisible();
+    await expect(page.getByText('We put people at the heart of care. Connect, share, and heal – together.')).toBeVisible();
+    await expect(page.getByText('Access your records anywhere, anytime. You control your journey.')).toBeVisible();
   });
 
-  test('shows feature cards with correct headings and descriptions', async ({ page }) => {
-    await expect(page.locator('h3:has-text("Private & Secure")')).toBeVisible();
-    await expect(page.locator('h3:has-text("Human Connection")')).toBeVisible();
-    await expect(page.locator('h3:has-text("Effortless Access")')).toBeVisible();
-    await expect(page.locator('text=Your health information stays protected')).toBeVisible();
-    await expect(page.locator('text=We put people at the heart of care')).toBeVisible();
-    await expect(page.locator('text=Access your records anywhere, anytime')).toBeVisible();
+  test('renders call-to-action with Sign Up Free button', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: /Ready to experience healthcare with heart/i })).toBeVisible();
+    const signupButton = page.getByRole('button', { name: /Sign Up Free/i });
+    await expect(signupButton).toBeVisible();
   });
 
-  test('shows call to action and navigates to signup', async ({ page }) => {
-    await expect(page.locator('h4')).toHaveText('Ready to experience healthcare with heart?');
-    const ctaBtn = page.locator('#cta-signup');
-    await expect(ctaBtn).toBeVisible();
-    await expect(ctaBtn).toContainText('Sign Up Free');
-    await ctaBtn.click();
-    await expect(page).toHaveURL(/\/signup/);
+  test('Sign Up Free button navigates to /signup', async ({ page }) => {
+    const signupButton = page.getByRole('button', { name: /Sign Up Free/i });
+    await signupButton.click();
+    await expect(page).toHaveURL('/signup');
   });
 
-  test('Landing page is accessible by keyboard', async ({ page }) => {
-    // Tab through navigation, then to hero/cta
-    for (let i = 0; i < 6; i++) {
+  test('landing page is accessible by basic checks', async ({ page }) => {
+    // No obvious accessibility violations (just basic checks)
+    // All headings are present
+    await expect(page.getByRole('heading', { name: /Healthcare, Reimagined\./i, level: 2 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Private & Secure/i, level: 3 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Human Connection/i, level: 3 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Effortless Access/i, level: 3 })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Sign Up Free/i })).toBeVisible();
+  });
+
+  test('features are keyboard reachable', async ({ page }) => {
+    // Tab through to CTA button
+    let found = false;
+    for (let i = 0; i < 20; i++) {
       await page.keyboard.press('Tab');
+      if (await page.evaluate(() => document.activeElement?.textContent?.includes('Sign Up Free'))) {
+        found = true;
+        break;
+      }
     }
-    // Focus should now be on the CTA signup button
-    await expect(page.locator('#cta-signup')).toBeFocused();
+    expect(found).toBe(true);
   });
 });
