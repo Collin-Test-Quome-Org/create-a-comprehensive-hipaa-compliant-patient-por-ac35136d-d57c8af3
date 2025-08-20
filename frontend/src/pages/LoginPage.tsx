@@ -1,75 +1,82 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Lock } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Lock, LogIn } from 'lucide-react';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  function handleSubmit(e: React.FormEvent) {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    // Mock login: always succeed
+    // Mock login logic: any email/password accepted
     setTimeout(() => {
+      if (email && password) {
+        navigate('/dashboard');
+      } else {
+        setError('Please enter email and password.');
+      }
       setLoading(false);
-      // For demo, navigate to dashboard after login
-      navigate('/dashboard');
-    }, 900);
-  }
+    }, 800);
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0e7ff] to-[#cbd5e1]">
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <Card className="w-[350px] shadow-xl">
-          <CardHeader>
-            <div className="flex flex-col items-center">
-              <Lock size={40} className="text-[#1d4ed8] mb-2" />
-              <CardTitle className="text-xl font-bold font-['Roboto'] text-[#1d4ed8]">Secure Login</CardTitle>
-              <span className="text-slate-500 text-sm mt-1">Welcome back to ShieldLink Health</span>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <Input
-                id="login-email"
-                type="email"
-                placeholder="Email address"
-                autoComplete="username"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                className="font-['Roboto']"
-              />
-              <Input
-                id="login-password"
-                type="password"
-                placeholder="Password"
-                autoComplete="current-password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                className="font-['Roboto']"
-              />
-              {error && <div className="text-red-600 text-sm">{error}</div>}
-              <Button id="login-submit" type="submit" disabled={loading} className="bg-[#1d4ed8] hover:bg-blue-700 font-bold">
-                {loading ? 'Logging in…' : 'Log In'}
-              </Button>
-            </form>
-            <div className="mt-4 flex flex-col items-center gap-2">
-              <Link to="/signup" className="text-[#1d4ed8] hover:underline text-sm" id="login-to-signup">Don't have an account? Sign up</Link>
-              <Link to="/mfa" className="text-slate-500 hover:underline text-xs" id="login-mfa-help">Need MFA help?</Link>
-            </div>
-          </CardContent>
-        </Card>
+    <div className="min-h-screen flex items-center justify-center bg-[#f1f5f9]">
+      <motion.div
+        initial={{ opacity: 0, y: 32 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="bg-white rounded-2xl shadow-xl px-8 py-12 w-full max-w-md"
+      >
+        <div className="flex justify-center mb-6">
+          <Lock size={40} className="text-[#1d4ed8]" />
+        </div>
+        <h1 className="text-2xl font-bold text-center font-['Roboto'] mb-2 text-[#1d4ed8]">Welcome Back</h1>
+        <p className="text-center text-slate-500 mb-8">Sign in to access your secure health portal</p>
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <label htmlFor="login-email" className="text-sm font-semibold">Email</label>
+          <Input
+            id="login-email"
+            type="email"
+            placeholder="you@email.com"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            className="mb-2"
+            autoComplete="username"
+            required
+          />
+          <label htmlFor="login-password" className="text-sm font-semibold">Password</label>
+          <Input
+            id="login-password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            className="mb-2"
+            autoComplete="current-password"
+            required
+          />
+          {error && <div className="text-red-500 text-sm mt-1 text-center">{error}</div>}
+          <Button id="login-submit" type="submit" className="w-full mt-2 flex items-center justify-center" disabled={loading}>
+            {loading ? (
+              <span>Signing in...</span>
+            ) : (
+              <><LogIn size={18} className="mr-2" />Sign In</>
+            )}
+          </Button>
+        </form>
+        <div className="mt-6 text-center">
+          <span className="text-slate-500">Don't have an account? </span>
+          <Link to="/signup" className="text-[#1d4ed8] font-semibold hover:underline">Sign Up</Link>
+        </div>
       </motion.div>
     </div>
   );
-}
+};
