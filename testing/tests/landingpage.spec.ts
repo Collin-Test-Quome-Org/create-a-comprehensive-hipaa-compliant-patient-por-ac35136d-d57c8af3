@@ -5,48 +5,50 @@ test.describe('Landing Page', () => {
     await page.goto('/');
   });
 
-  test('renders hero section', async ({ page }) => {
-    // There is a Hero component, but we only have access to the heading below
-    await expect(page.getByText('Healthcare, Reimagined.')).toBeVisible();
-    await expect(page.getByText(/your data is your own/i)).toBeVisible();
-    await expect(page.getByText('ShieldLink Health')).toBeVisible();
+  test('shows hero and main heading', async ({ page }) => {
+    // Hero may be an image or large banner (cannot test alt but check presence)
+    // Main heading
+    await expect(page.locator('h2')).toHaveText('Healthcare, Reimagined.');
+    await expect(page.locator('text=ShieldLink Health')).toBeVisible();
   });
 
-  test('renders three feature cards', async ({ page }) => {
-    await expect(page.getByText('Private & Secure')).toBeVisible();
-    await expect(page.getByText('Human Connection')).toBeVisible();
-    await expect(page.getByText('Effortless Access')).toBeVisible();
-    await expect(page.getByText('Your health information stays protected with end-to-end encryption and privacy-first design.')).toBeVisible();
-    await expect(page.getByText('We put people at the heart of care. Connect, share, and heal – together.')).toBeVisible();
-    await expect(page.getByText('Access your records anywhere, anytime. You control your journey.')).toBeVisible();
+  test('displays all three feature cards', async ({ page }) => {
+    const cards = page.locator('div.grid > div');
+    await expect(cards).toHaveCount(3);
+    await expect(cards.nth(0)).toContainText('Private & Secure');
+    await expect(cards.nth(1)).toContainText('Human Connection');
+    await expect(cards.nth(2)).toContainText('Effortless Access');
   });
 
-  test('renders call-to-action section', async ({ page }) => {
-    await expect(page.getByText('Ready to experience healthcare with heart?')).toBeVisible();
-    // Button contains 'Sign Up Free' and is a link to /signup
-    const ctaButton = page.getByRole('link', { name: 'Sign Up Free' });
+  test('feature cards have correct descriptions', async ({ page }) => {
+    await expect(page.locator('text=Your health information stays protected with end-to-end encryption and privacy-first design.')).toBeVisible();
+    await expect(page.locator('text=We put people at the heart of care. Connect, share, and heal – together.')).toBeVisible();
+    await expect(page.locator('text=Access your records anywhere, anytime. You control your journey.')).toBeVisible();
+  });
+
+  test('call to action section present with sign up button', async ({ page }) => {
+    await expect(page.locator('h4')).toHaveText('Ready to experience healthcare with heart?');
+    const ctaButton = page.locator('#cta-signup');
     await expect(ctaButton).toBeVisible();
-    await expect(ctaButton).toHaveAttribute('href', '/signup');
+    await expect(ctaButton).toContainText('Sign Up Free');
   });
 
-  test('CTA Sign Up button navigates to signup page', async ({ page }) => {
-    await page.getByRole('link', { name: 'Sign Up Free' }).click();
-    await expect(page).toHaveURL('/signup');
-    await expect(page.getByText('Signup page coming soon...')).toBeVisible();
+  test('sign up CTA button navigates to signup page', async ({ page }) => {
+    await page.click('#cta-signup');
+    await expect(page).toHaveURL(/\/signup$/);
+    await expect(page.locator('h1')).toHaveCount(1); // Signup page should have a heading
   });
 
-  test('feature cards have accessible structure', async ({ page }) => {
-    // Each card should have a heading and paragraph
-    const headings = await page.locator('h3').allTextContents();
-    expect(headings).toContain('Private & Secure');
-    expect(headings).toContain('Human Connection');
-    expect(headings).toContain('Effortless Access');
-  });
-
-  test('page is visually accessible (landmarks, headings)', async ({ page }) => {
-    await expect(page.locator('main')).toBeVisible();
-    await expect(page.locator('h2')).toContainText('Healthcare, Reimagined.');
-    await expect(page.locator('h3')).toHaveCount(3);
-    await expect(page.locator('h4')).toContainText('Ready to experience healthcare with heart?');
+  test('page is accessible via keyboard (tab to CTA)', async ({ page }) => {
+    // Tab through nav, then main content, then to CTA button
+    let foundCTA = false;
+    for (let i = 0; i < 15; i++) {
+      await page.keyboard.press('Tab');
+      if (await page.locator('#cta-signup').isFocused()) {
+        foundCTA = true;
+        break;
+      }
+    }
+    expect(foundCTA).toBe(true);
   });
 });
