@@ -8,63 +8,64 @@ import { Lock } from 'lucide-react';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
-  const [pw, setPw] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Mock login: accept any email/pw
-    if (!email || !pw) {
-      setError('Please enter your email and password.');
-      return;
-    }
+    setLoading(true);
     setError('');
+    // Mock login: always succeed
     setTimeout(() => {
+      setLoading(false);
+      // For demo, navigate to dashboard after login
       navigate('/dashboard');
-    }, 500);
+    }, 900);
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f1f5f9]">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <Card className="w-[370px] shadow-xl">
-          <CardHeader className="flex flex-col items-center gap-2 pt-8 pb-0">
-            <Lock size={40} className="text-[#1d4ed8] mb-1" />
-            <CardTitle className="text-2xl font-bold font-['Roboto'] text-[#1d4ed8]">Sign in to ShieldLink</CardTitle>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e0e7ff] to-[#cbd5e1]">
+      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <Card className="w-[350px] shadow-xl">
+          <CardHeader>
+            <div className="flex flex-col items-center">
+              <Lock size={40} className="text-[#1d4ed8] mb-2" />
+              <CardTitle className="text-xl font-bold font-['Roboto'] text-[#1d4ed8]">Secure Login</CardTitle>
+              <span className="text-slate-500 text-sm mt-1">Welcome back to ShieldLink Health</span>
+            </div>
           </CardHeader>
-          <CardContent className="py-6 px-6 flex flex-col gap-5">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4" autoComplete="on">
-              <label htmlFor="login-email" className="text-sm font-medium">Email</label>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <Input
                 id="login-email"
                 type="email"
-                required
+                placeholder="Email address"
+                autoComplete="username"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="you@email.com"
-                autoComplete="email"
+                required
+                className="font-['Roboto']"
               />
-              <label htmlFor="login-password" className="text-sm font-medium">Password</label>
               <Input
                 id="login-password"
                 type="password"
-                required
-                value={pw}
-                onChange={e => setPw(e.target.value)}
                 placeholder="Password"
                 autoComplete="current-password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                className="font-['Roboto']"
               />
-              {error && <div className="text-red-600 text-sm mt-1">{error}</div>}
-              <Button id="login-submit" type="submit" className="mt-4 font-bold text-lg bg-[#1d4ed8] hover:bg-blue-700">Sign In</Button>
+              {error && <div className="text-red-600 text-sm">{error}</div>}
+              <Button id="login-submit" type="submit" disabled={loading} className="bg-[#1d4ed8] hover:bg-blue-700 font-bold">
+                {loading ? 'Logging in…' : 'Log In'}
+              </Button>
             </form>
-            <div className="text-center text-sm text-slate-600 mt-2">
-              New to ShieldLink?{' '}
-              <Link to="/signup" className="text-[#1d4ed8] font-semibold hover:underline" id="login-signup-link">Create account</Link>
+            <div className="mt-4 flex flex-col items-center gap-2">
+              <Link to="/signup" className="text-[#1d4ed8] hover:underline text-sm" id="login-to-signup">Don't have an account? Sign up</Link>
+              <Link to="/mfa" className="text-slate-500 hover:underline text-xs" id="login-mfa-help">Need MFA help?</Link>
             </div>
           </CardContent>
         </Card>
