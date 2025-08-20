@@ -1,59 +1,88 @@
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useState } from 'react'
 
-const mockProfile = {
-  name: 'Jordan Lee',
-  email: 'jordan.lee@securemed.com',
-  dob: '1988-03-22',
-  phone: '(555) 246-8013',
-  address: '789 Blue Shield St, Slate City, USA',
-  insurance: 'BlueCross Secure Plan',
-};
+const mockUser = {
+  name: 'Alex Patient',
+  email: 'alex.patient@email.com',
+  phone: '+1 (555) 123-4567',
+  role: 'Patient',
+  avatar: '/branding/assets/logo-1.png',
+}
 
 export function Profile() {
+  const [editMode, setEditMode] = useState(false)
+  const [form, setForm] = useState({ name: mockUser.name, email: mockUser.email, phone: mockUser.phone })
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
+
+  function handleEdit() {
+    setEditMode(true)
+  }
+
+  function handleCancel() {
+    setForm({ name: mockUser.name, email: mockUser.email, phone: mockUser.phone })
+    setEditMode(false)
+  }
+
+  function handleSave(e: React.FormEvent) {
+    e.preventDefault()
+    setEditMode(false)
+    // Would submit here
+  }
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center min-h-[80vh] bg-slate-50 py-12"
-    >
-      <Card className="max-w-xl w-full shadow-xl">
+    <div className="max-w-xl mx-auto py-12 px-4">
+      <Card className="shadow-lg">
         <CardHeader className="flex flex-row items-center gap-4">
-          <img
-            src="/branding/assets/logo-1.png"
-            className="w-20 h-20 rounded-full border-2 border-blue-700 bg-white shadow"
-          />
+          <img src={mockUser.avatar} className="w-20 h-20 rounded-full shadow border border-slate-200" />
           <div>
-            <CardTitle className="font-['Roboto'] text-2xl text-blue-900" style={{ fontWeight: 700 }}>{mockProfile.name}</CardTitle>
-            <div className="text-slate-500 font-['Roboto']" style={{ fontWeight: 400 }}>{mockProfile.email}</div>
+            <CardTitle className="text-2xl font-bold font-['Roboto']">Profile</CardTitle>
+            <span className="text-slate-500 font-['Roboto']">{mockUser.role}</span>
           </div>
         </CardHeader>
-        <CardContent className="mt-4 space-y-2">
-          <div className="flex gap-2 items-center">
-            <span className="w-28 font-medium text-slate-700">Date of Birth:</span>
-            <span className="font-['Roboto']">{mockProfile.dob}</span>
-          </div>
-          <div className="flex gap-2 items-center">
-            <span className="w-28 font-medium text-slate-700">Phone:</span>
-            <span className="font-['Roboto']">{mockProfile.phone}</span>
-          </div>
-          <div className="flex gap-2 items-center">
-            <span className="w-28 font-medium text-slate-700">Address:</span>
-            <span className="font-['Roboto']">{mockProfile.address}</span>
-          </div>
-          <div className="flex gap-2 items-center">
-            <span className="w-28 font-medium text-slate-700">Insurance:</span>
-            <span className="font-['Roboto']">{mockProfile.insurance}</span>
-          </div>
+        <CardContent>
+          {editMode ? (
+            <form className="space-y-5" onSubmit={handleSave}>
+              <div>
+                <label htmlFor="profile-name" className="block text-slate-700 font-medium">Name</label>
+                <Input id="profile-name" name="name" value={form.name} onChange={handleChange} className="mt-1" required />
+              </div>
+              <div>
+                <label htmlFor="profile-email" className="block text-slate-700 font-medium">Email</label>
+                <Input id="profile-email" name="email" value={form.email} onChange={handleChange} className="mt-1" type="email" required />
+              </div>
+              <div>
+                <label htmlFor="profile-phone" className="block text-slate-700 font-medium">Phone</label>
+                <Input id="profile-phone" name="phone" value={form.phone} onChange={handleChange} className="mt-1" />
+              </div>
+              <div className="flex gap-3 mt-4">
+                <Button id="profile-save" type="submit" className="bg-blue-700 text-white hover:bg-blue-800">Save</Button>
+                <Button id="profile-cancel" variant="outline" type="button" onClick={handleCancel}>Cancel</Button>
+              </div>
+            </form>
+          ) : (
+            <div className="space-y-4 mt-3">
+              <div>
+                <span className="block text-slate-600 font-medium">Name</span>
+                <span className="text-lg">{form.name}</span>
+              </div>
+              <div>
+                <span className="block text-slate-600 font-medium">Email</span>
+                <span>{form.email}</span>
+              </div>
+              <div>
+                <span className="block text-slate-600 font-medium">Phone</span>
+                <span>{form.phone}</span>
+              </div>
+              <Button id="profile-edit" onClick={handleEdit} className="mt-2 bg-blue-700 text-white hover:bg-blue-800">Edit Profile</Button>
+            </div>
+          )}
         </CardContent>
-        <CardFooter className="flex gap-4 mt-4">
-          <Button id="profile-edit-btn" variant="outline" className="text-blue-700 border-blue-700 hover:bg-blue-50">
-            Edit Profile
-          </Button>
-          <Button id="profile-logout-btn" className="bg-blue-700 hover:bg-blue-800 text-white">Logout</Button>
-        </CardFooter>
       </Card>
-    </motion.div>
-  );
+    </div>
+  )
 }
