@@ -1,93 +1,100 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { motion } from 'framer-motion';
+import { Label } from '@/components/ui/label';
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { UserPlus } from 'lucide-react';
 
 export const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSignup = (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
-    // Mock signup logic: any input accepted, redirect to dashboard
+    if (!email || !name || !password) {
+      setError('Please fill out all fields.');
+      return;
+    }
+    // Mock signup: allow any info
     setTimeout(() => {
-      if (email && password && name) {
-        navigate('/dashboard');
-      } else {
-        setError('Please fill in all fields.');
-      }
-      setLoading(false);
-    }, 800);
+      navigate('/dashboard');
+    }, 600);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f1f5f9]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8fafc] py-12">
       <motion.div
-        initial={{ opacity: 0, y: 32 }}
+        initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-white rounded-2xl shadow-xl px-8 py-12 w-full max-w-md"
+        transition={{ duration: 0.7 }}
+        className="w-full max-w-md"
       >
-        <div className="flex justify-center mb-6">
-          <UserPlus size={40} className="text-[#1d4ed8]" />
-        </div>
-        <h1 className="text-2xl font-bold text-center font-['Roboto'] mb-2 text-[#1d4ed8]">Create Your Account</h1>
-        <p className="text-center text-slate-500 mb-8">Start your secure journey with ShieldLink Health</p>
-        <form onSubmit={handleSignup} className="flex flex-col gap-4">
-          <label htmlFor="signup-name" className="text-sm font-semibold">Full Name</label>
-          <Input
-            id="signup-name"
-            type="text"
-            placeholder="Your Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            className="mb-2"
-            required
-          />
-          <label htmlFor="signup-email" className="text-sm font-semibold">Email</label>
-          <Input
-            id="signup-email"
-            type="email"
-            placeholder="you@email.com"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className="mb-2"
-            autoComplete="username"
-            required
-          />
-          <label htmlFor="signup-password" className="text-sm font-semibold">Password</label>
-          <Input
-            id="signup-password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            className="mb-2"
-            autoComplete="new-password"
-            required
-          />
-          {error && <div className="text-red-500 text-sm mt-1 text-center">{error}</div>}
-          <Button id="signup-submit" type="submit" className="w-full mt-2 flex items-center justify-center" disabled={loading}>
-            {loading ? (
-              <span>Creating account...</span>
-            ) : (
-              <><UserPlus size={18} className="mr-2" />Sign Up</>
-            )}
-          </Button>
-        </form>
-        <div className="mt-6 text-center">
-          <span className="text-slate-500">Already have an account? </span>
-          <Link to="/login" className="text-[#1d4ed8] font-semibold hover:underline">Log In</Link>
-        </div>
+        <Card className="shadow-2xl rounded-xl">
+          <CardHeader className="text-center">
+            <CardTitle className="flex flex-col items-center gap-2">
+              <UserPlus className="text-[#1d4ed8] mb-1" size={40} />
+              <span className="font-['Roboto'] text-2xl font-bold text-[#1d4ed8]">Create Account</span>
+            </CardTitle>
+            <p className="text-slate-600 mt-2">Join ShieldLink Health to take charge of your care</p>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={onSubmit} className="space-y-6">
+              <div>
+                <Label htmlFor="signup-name" className="font-medium">Full Name</Label>
+                <Input
+                  id="signup-name"
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Your Name"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="signup-email" className="font-medium">Email Address</Label>
+                <Input
+                  id="signup-email"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="signup-password" className="font-medium">Password</Label>
+                <Input
+                  id="signup-password"
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              {error && <div className="text-red-600 text-sm text-center">{error}</div>}
+              <Button type="submit" id="signup-submit" className="w-full flex items-center gap-2 justify-center">
+                <UserPlus size={18} />
+                Sign Up
+              </Button>
+            </form>
+            <div className="flex justify-between mt-6 text-sm">
+              <span>
+                Already have an account?{' '}
+                <Link to="/login" className="text-[#1d4ed8] font-medium underline" id="signup-login-link">
+                  Log in
+                </Link>
+              </span>
+            </div>
+          </CardContent>
+        </Card>
       </motion.div>
     </div>
   );
-};
+}

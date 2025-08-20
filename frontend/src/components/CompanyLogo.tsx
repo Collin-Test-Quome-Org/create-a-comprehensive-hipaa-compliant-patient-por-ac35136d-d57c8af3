@@ -1,14 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 
-/**
- * CompanyLogo component renders the ShieldLink Health logo as per brand kit
- * Props: size (number, defaults to 36)
- */
+// Brand Kit: logo-0 is a shield-shaped icon with blue and slate split, center lock symbol
 export const CompanyLogo = ({ size = 36 }: { size?: number }) => (
   <img
-    src={"/branding/assets/logo-0.png"}
-    style={{ width: size, height: size }}
+    src={require('/branding/assets/logo-0.png')}
+    style={{ width: size, height: size, display: 'inline-block', verticalAlign: 'middle' }}
     draggable={false}
-    aria-hidden="true"
   />
 );
