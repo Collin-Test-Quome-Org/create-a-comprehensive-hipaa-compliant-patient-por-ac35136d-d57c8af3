@@ -1,106 +1,143 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const companyVoice = {
+  headline: 'Welcome to TrustLink Health! Your Secure Bridge to Better Care.',
+  subheadline:
+    'Empowering patients and providers with seamless, secure access to medical records, messaging, and appointments. All in one intuitive platform.',
+  cta: 'Get Started',
+  learnMore: 'How It Works',
+};
 
 export function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white via-blue-50 to-slate-100">
-      <div style={{ backgroundImage: "url('/branding/assets/hero-0.png')" }} className="bg-cover bg-center h-[36rem] relative">
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-center">
-          <motion.img
-            src="/branding/assets/logo-0.png"
-            initial={{ y: -60, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 60, delay: 0.2 }}
-            className="w-28 h-28 mb-6 drop-shadow-2xl"
-          />
-          <motion.h1
-            className="text-white text-5xl md:text-7xl font-roboto font-bold mb-6 drop-shadow-xl"
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.35 }}
-            style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}
-          >
-            Welcome to SecureMed Vault
-          </motion.h1>
-          <motion.p
-            className="text-white/90 text-lg md:text-2xl mb-10 max-w-2xl mx-auto"
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 400 }}
-          >
-            Your trusted partner in secure, connected healthcare. Effortlessly manage your appointments, prescriptions, records, and more—all in one place. Where privacy meets peace of mind.
-          </motion.p>
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.7 }}
-          >
-            <Link to="/signup">
-              <Button id="get-started-cta" className="text-lg px-10 py-6 bg-blue-700 hover:bg-blue-900 text-white rounded-lg shadow-lg font-bold transition-all ">
-                Get Started
-                <ChevronRight className="ml-2 w-5 h-5" />
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </div>
-      <section className="py-16 px-4 md:px-12 max-w-6xl mx-auto w-full">
-        <motion.h2
-          className="text-3xl md:text-4xl font-roboto font-bold text-blue-900 mb-6 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}
+    <div className="flex flex-col min-h-screen w-full bg-gradient-to-br from-[#cbd5e1] via-white to-[#1d4ed8]/10">
+      {/* Hero Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative"
+      >
+        <div
+          className="bg-cover bg-center h-96 flex items-center"
+          style={{ backgroundImage: "url('/branding/assets/hero-0.png')" }}
         >
-          Why SecureMed Vault?
-        </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+          <div className="bg-black/50 h-full w-full flex flex-col justify-center items-center text-center px-6">
+            <motion.h1
+              className="text-white text-4xl md:text-5xl font-bold mb-4"
+              style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              {companyVoice.headline}
+            </motion.h1>
+            <motion.p
+              className="text-slate-100 text-lg md:text-xl mb-8 max-w-2xl mx-auto"
+              style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 400 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              {companyVoice.subheadline}
+            </motion.p>
+            <div className="flex gap-4 justify-center">
+              <Link to="/signup">
+                <Button id="get-started-cta" size="lg" className="text-lg px-6 bg-[#1d4ed8] hover:bg-blue-700 text-white font-bold shadow-lg">
+                  {companyVoice.cta}
+                  <ArrowRight className="ml-2 w-5 h-5 animate-bounce-right" />
+                </Button>
+              </Link>
+              <Link to="/about">
+                <Button id="learn-more-cta" variant="outline" className="text-lg px-6 border-white text-white hover:bg-white/10">
+                  {companyVoice.learnMore}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+      {/* Features Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
           <motion.div
-            className="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center hover:shadow-xl transition-shadow"
-            whileHover={{ scale: 1.05 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
           >
-            <span className="bg-blue-100 p-4 rounded-full mb-4">
-              <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-700"><path d="M18 3l6 6h-4v9h-4v-9h-4l6-6z" /><circle cx="18" cy="18" r="15" strokeDasharray="2 2" /></svg>
-            </span>
-            <h3 className="text-xl font-bold mb-2 text-blue-800">Privacy First</h3>
-            <p className="text-gray-600 text-center">Every byte is encrypted. Only you and your care team can access your medical world.</p>
-          </motion.div>
-          <motion.div
-            className="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center hover:shadow-xl transition-shadow"
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className="bg-blue-100 p-4 rounded-full mb-4">
-              <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-700"><circle cx="18" cy="18" r="13" /><path d="M18 10v8l6 3" /></svg>
-            </span>
-            <h3 className="text-xl font-bold mb-2 text-blue-800">Lightning Fast Access</h3>
-            <p className="text-gray-600 text-center">Your info, your schedule, right when you need it. No lines, no waiting rooms.</p>
-          </motion.div>
-          <motion.div
-            className="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center hover:shadow-xl transition-shadow"
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className="bg-blue-100 p-4 rounded-full mb-4">
-              <svg width="36" height="36" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-700"><rect x="7" y="10" width="22" height="16" rx="2" /><path d="M7 14h22" /></svg>
-            </span>
-            <h3 className="text-xl font-bold mb-2 text-blue-800">All-in-One Platform</h3>
-            <p className="text-gray-600 text-center">Book appointments, message your doctor, manage prescriptions—control your health journey.</p>
+            <h2 className="text-3xl font-bold text-[#1d4ed8] mb-6" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}>Why TrustLink Health?</h2>
+            <div className="grid md:grid-cols-3 gap-10 mt-8">
+              <motion.div
+                className="bg-[#f3f6fa] p-6 rounded-lg shadow group hover:shadow-xl border border-[#cbd5e1] transition-all"
+                whileHover={{ scale: 1.04, rotate: 1 }}
+              >
+                <div className="flex items-center mb-3">
+                  <span className="rounded-full bg-[#1d4ed8]/10 p-2 mr-2">
+                    <svg className="w-8 h-8 text-[#1d4ed8]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                  </span>
+                  <h3 className="text-xl font-bold">Security First</h3>
+                </div>
+                <p className="text-gray-600">Military-grade encryption and privacy controls keep your health data locked tighter than a vault.</p>
+              </motion.div>
+              <motion.div
+                className="bg-[#f3f6fa] p-6 rounded-lg shadow group hover:shadow-xl border border-[#cbd5e1] transition-all"
+                whileHover={{ scale: 1.04, rotate: -1 }}
+              >
+                <div className="flex items-center mb-3">
+                  <span className="rounded-full bg-[#1d4ed8]/10 p-2 mr-2">
+                    <svg className="w-8 h-8 text-[#1d4ed8]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M8 12l2 2 4-4" />
+                    </svg>
+                  </span>
+                  <h3 className="text-xl font-bold">Effortless Access</h3>
+                </div>
+                <p className="text-gray-600">All your medical records, appointments, and prescriptions—one click away, anytime, anywhere.</p>
+              </motion.div>
+              <motion.div
+                className="bg-[#f3f6fa] p-6 rounded-lg shadow group hover:shadow-xl border border-[#cbd5e1] transition-all"
+                whileHover={{ scale: 1.04, rotate: 1 }}
+              >
+                <div className="flex items-center mb-3">
+                  <span className="rounded-full bg-[#1d4ed8]/10 p-2 mr-2">
+                    <svg className="w-8 h-8 text-[#1d4ed8]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M12 19c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2z" />
+                      <path d="M12 17V7m0 0C9.243 7 7 9.243 7 12c0 2.757 2.243 5 5 5m0-10c2.757 0 5 2.243 5 5 0 2.757-2.243 5-5 5" />
+                    </svg>
+                  </span>
+                  <h3 className="text-xl font-bold">Real-Time Connections</h3>
+                </div>
+                <p className="text-gray-600">Securely message your care team and receive instant notifications—because your health can’t wait.</p>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
-      <section className="py-12 px-4 bg-blue-50 border-t border-blue-200 text-center">
-        <h2 className="text-2xl font-bold text-blue-900 mb-3" style={{ fontFamily: 'Roboto', fontWeight: 700 }}>
-          Ready to feel in control of your health?
-        </h2>
-        <p className="mb-6 text-gray-700 max-w-xl mx-auto">Sign up today and experience healthcare on your terms—with SecureMed Vault, your records are truly yours.</p>
-        <Link to="/signup">
-          <Button id="home-signup-cta" className="bg-blue-700 hover:bg-blue-900 text-white font-bold text-lg px-8 py-4 rounded-lg shadow">
-            Get Started Now <ChevronRight className="ml-2 w-5 h-5" />
-          </Button>
-        </Link>
+      {/* Call to Action */}
+      <section className="py-14 bg-[#1d4ed8]">
+        <div className="max-w-3xl mx-auto flex flex-col items-center px-4">
+          <motion.h2
+            className="text-white text-2xl md:text-3xl font-bold mb-5 text-center"
+            style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            Ready to experience healthcare without the hassle?
+          </motion.h2>
+          <Link to="/signup">
+            <Button id="final-cta" size="lg" className="bg-white text-[#1d4ed8] font-semibold px-8 py-2 text-lg shadow hover:bg-[#cbd5e1] transition">
+              {companyVoice.cta}
+            </Button>
+          </Link>
+        </div>
       </section>
     </div>
   );
