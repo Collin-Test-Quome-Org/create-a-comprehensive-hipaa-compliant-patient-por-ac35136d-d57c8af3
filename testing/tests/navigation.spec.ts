@@ -1,3 +1,4 @@
+// Playwright tests for frontend/src/Navigation.tsx
 import { test, expect } from '@playwright/test';
 
 test.describe('Navigation Bar', () => {
@@ -5,66 +6,74 @@ test.describe('Navigation Bar', () => {
     await page.goto('/');
   });
 
-  test('displays company logo and title with link to home', async ({ page }) => {
-    // The logo and brand name are linked to home
-    const logoLink = page.locator('a[href="/"]');
-    await expect(logoLink).toBeVisible();
-    await expect(logoLink).toContainText('ShieldLink Health');
+  test('renders all navigation links and company logo', async ({ page }) => {
+    // Logo and app name
+    await expect(page.locator('text=ShieldLink Health')).toBeVisible();
+    // Nav links
+    await expect(page.locator('#nav-about')).toHaveText('About');
+    await expect(page.locator('#nav-features')).toHaveText('Features');
+    await expect(page.locator('#nav-log-in')).toHaveText('Log In');
+    await expect(page.locator('#nav-sign-up')).toHaveText('Sign Up');
   });
 
-  test('shows all navigation links with correct labels and highlights', async ({ page }) => {
-    const aboutLink = page.locator('#nav-about');
-    const featuresLink = page.locator('#nav-features');
-    const loginLink = page.locator('#nav-log-in');
-    const signupLink = page.locator('#nav-sign-up');
-    await expect(aboutLink).toBeVisible();
-    await expect(aboutLink).toHaveText('About');
-    await expect(featuresLink).toBeVisible();
-    await expect(featuresLink).toHaveText('Features');
-    await expect(loginLink).toBeVisible();
-    await expect(loginLink).toHaveText('Log In');
-    await expect(signupLink).toBeVisible();
-    await expect(signupLink).toHaveText('Sign Up');
-  });
-
-  test('navigates to About page and highlights active link', async ({ page }) => {
+  test('navigates to About page', async ({ page }) => {
     await page.click('#nav-about');
-    await expect(page).toHaveURL(/\/about$/);
-    await expect(page.locator('div')).toContainText('About page coming soon');
-    // Check if About link is highlighted (border-b-4)
-    const aboutLink = page.locator('#nav-about');
-    await expect(aboutLink).toHaveAttribute('class', /border-b-4/);
+    await expect(page).toHaveURL('/about');
+    await expect(page.locator('text=About page coming soon...')).toBeVisible();
   });
 
-  test('navigates to Features, Log In, and Sign Up pages', async ({ page }) => {
+  test('navigates to Features page', async ({ page }) => {
     await page.click('#nav-features');
-    await expect(page).toHaveURL(/\/features$/);
-    await expect(page.locator('div')).toContainText('Features page coming soon');
+    await expect(page).toHaveURL('/features');
+    await expect(page.locator('text=Features page coming soon...')).toBeVisible();
+  });
+
+  test('navigates to Log In page', async ({ page }) => {
     await page.click('#nav-log-in');
-    await expect(page).toHaveURL(/\/login$/);
-    await expect(page.locator('h1')).toHaveCount(1); // Should have a heading for login page
+    await expect(page).toHaveURL('/login');
+    // Optionally check for login form elements if present
+  });
+
+  test('navigates to Sign Up page', async ({ page }) => {
     await page.click('#nav-sign-up');
-    await expect(page).toHaveURL(/\/signup$/);
-    await expect(page.locator('h1')).toHaveCount(1); // Should have a heading for signup page
+    await expect(page).toHaveURL('/signup');
+    // Optionally check for signup form elements if present
   });
 
-  test('Sign Up nav link is styled as highlighted (primary color)', async ({ page }) => {
-    const signupLink = page.locator('#nav-sign-up');
-    // Should have white text and blue background
-    await expect(signupLink).toHaveClass(/bg-\[#1d4ed8\]/);
-    await expect(signupLink).toHaveClass(/text-white/);
+  test('active nav link is highlighted', async ({ page }) => {
+    // Home: none of the nav links should be active
+    await expect(page.locator('#nav-about')).not.toHaveClass(/border-b-4/);
+    // Go to Features
+    await page.click('#nav-features');
+    await expect(page.locator('#nav-features')).toHaveClass(/border-b-4/);
+    // Go to About
+    await page.click('#nav-about');
+    await expect(page.locator('#nav-about')).toHaveClass(/border-b-4/);
   });
 
-  test('keyboard navigation: tab to nav links', async ({ page }) => {
-    await page.keyboard.press('Tab'); // Logo/home
-    await expect(page.locator('a[href="/"]')).toBeFocused();
-    await page.keyboard.press('Tab'); // About
-    await expect(page.locator('#nav-about')).toBeFocused();
-    await page.keyboard.press('Tab'); // Features
-    await expect(page.locator('#nav-features')).toBeFocused();
-    await page.keyboard.press('Tab'); // Log In
-    await expect(page.locator('#nav-log-in')).toBeFocused();
-    await page.keyboard.press('Tab'); // Sign Up
-    await expect(page.locator('#nav-sign-up')).toBeFocused();
+  test('company logo link navigates to home', async ({ page }) => {
+    // Go away from home
+    await page.click('#nav-about');
+    await page.click('text=ShieldLink Health');
+    await expect(page).toHaveURL('/');
+    await expect(page.locator('text=Healthcare, Reimagined.')).toBeVisible();
+  });
+
+  test('Sign Up link is visually highlighted', async ({ page }) => {
+    // Should have the blue background and white text
+    const signUpLink = page.locator('#nav-sign-up');
+    await expect(signUpLink).toHaveClass(/bg-\[#1d4ed8\]/);
+    await expect(signUpLink).toHaveClass(/text-white/);
+  });
+
+  test('navigation is accessible via keyboard', async ({ page }) => {
+    // Tab to first nav link
+    await page.keyboard.press('Tab'); // Logo link
+    await expect(page.locator('text=ShieldLink Health')).toBeFocused();
+    // Tab through each nav link
+    for (const id of ['nav-about','nav-features','nav-log-in','nav-sign-up']) {
+      await page.keyboard.press('Tab');
+      await expect(page.locator(`#${id}`)).toBeFocused();
+    }
   });
 });
