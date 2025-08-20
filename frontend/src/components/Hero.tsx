@@ -1,26 +1,38 @@
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
-export const Hero = () => (
-  <motion.section
-    initial={{ opacity: 0, y: 40 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.9, ease: 'easeOut' }}
-    className="relative w-full h-[32rem] flex items-center justify-center bg-cover bg-center"
-    style={{ backgroundImage: "url('/branding/assets/hero-0.png')" }}
-  >
-    <div className="absolute inset-0 bg-black/50 flex items-center justify-center" />
-    <div className="relative z-10 text-center px-6">
-      <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg font-['Roboto'] tracking-tight">
-        Securely Connected Healthcare
-      </h1>
-      <p className="text-lg md:text-2xl text-slate-100 max-w-2xl mx-auto mb-8 font-['Roboto']">
-        Welcome to ShieldLink Health – where privacy, trust, and human connection empower your care journey.
-      </p>
-      <Button id="get-started-cta" size="lg" className="text-lg px-8 font-bold" asChild>
-        <Link to="/signup">Get Started</Link>
-      </Button>
+export function Hero() {
+  return (
+    <div
+      style={{ backgroundImage: "url('/branding/assets/hero-0.png')" }}
+      className="bg-cover bg-center h-[32rem] relative"
+    >
+      <div className="bg-black bg-opacity-60 h-full w-full flex items-center justify-center">
+        <motion.div
+          className="text-center max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <h1
+            className="text-white text-5xl md:text-6xl font-bold mb-4 font-['Roboto']"
+            style={{ fontWeight: 700 }}
+          >
+            Welcome to MedLock: Secure, Simple Health Management
+          </h1>
+          <p className="text-slate-100 text-lg mb-8 font-['Roboto']" style={{ fontWeight: 400 }}>
+            Your health, your records, your peace of mind. MedLock keeps your medical life
+            organized, connected, and safe – all in one trusted place.
+          </p>
+          <Button asChild size="lg" id="cta-get-started" className="text-base font-semibold px-8 py-6" >
+            <Link to="/signup">
+              Get Started Free <ArrowRight className="inline ml-2" />
+            </Link>
+          </Button>
+        </motion.div>
+      </div>
     </div>
-  </motion.section>
-);
+  )
+}
