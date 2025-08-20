@@ -1,88 +1,81 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 
-const mockUser = {
-  name: 'Alex Patient',
-  email: 'alex.patient@email.com',
-  phone: '+1 (555) 123-4567',
-  role: 'Patient',
-  avatar: '/branding/assets/logo-1.png',
+const mockProfile = {
+  name: 'Jordan Lee',
+  email: 'jordan.lee@email.com',
+  phone: '+1 555-234-5678',
+  dob: '1990-01-15',
+  address: '123 Main St, Springfield, USA',
 }
 
 export function Profile() {
-  const [editMode, setEditMode] = useState(false)
-  const [form, setForm] = useState({ name: mockUser.name, email: mockUser.email, phone: mockUser.phone })
+  const [profile, setProfile] = useState(mockProfile)
+  const [editing, setEditing] = useState(false)
+  const [form, setForm] = useState(profile)
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  function handleEdit() {
-    setEditMode(true)
-  }
-
-  function handleCancel() {
-    setForm({ name: mockUser.name, email: mockUser.email, phone: mockUser.phone })
-    setEditMode(false)
-  }
-
-  function handleSave(e: React.FormEvent) {
-    e.preventDefault()
-    setEditMode(false)
-    // Would submit here
+  const handleSave = () => {
+    setProfile(form)
+    setEditing(false)
   }
 
   return (
-    <div className="max-w-xl mx-auto py-12 px-4">
-      <Card className="shadow-lg">
-        <CardHeader className="flex flex-row items-center gap-4">
-          <img src={mockUser.avatar} className="w-20 h-20 rounded-full shadow border border-slate-200" />
-          <div>
-            <CardTitle className="text-2xl font-bold font-['Roboto']">Profile</CardTitle>
-            <span className="text-slate-500 font-['Roboto']">{mockUser.role}</span>
-          </div>
-        </CardHeader>
-        <CardContent>
-          {editMode ? (
-            <form className="space-y-5" onSubmit={handleSave}>
+    <div className="flex flex-col items-center py-12 min-h-[80vh] bg-slate-50">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-lg"
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold" style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 700 }}>My Profile</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-4">
               <div>
-                <label htmlFor="profile-name" className="block text-slate-700 font-medium">Name</label>
-                <Input id="profile-name" name="name" value={form.name} onChange={handleChange} className="mt-1" required />
+                <Label htmlFor="profile-name">Name</Label>
+                <Input id="profile-name" name="name" value={editing ? form.name : profile.name} onChange={handleChange} disabled={!editing} />
               </div>
               <div>
-                <label htmlFor="profile-email" className="block text-slate-700 font-medium">Email</label>
-                <Input id="profile-email" name="email" value={form.email} onChange={handleChange} className="mt-1" type="email" required />
+                <Label htmlFor="profile-email">Email</Label>
+                <Input id="profile-email" name="email" value={editing ? form.email : profile.email} onChange={handleChange} disabled={!editing} />
               </div>
               <div>
-                <label htmlFor="profile-phone" className="block text-slate-700 font-medium">Phone</label>
-                <Input id="profile-phone" name="phone" value={form.phone} onChange={handleChange} className="mt-1" />
+                <Label htmlFor="profile-phone">Phone</Label>
+                <Input id="profile-phone" name="phone" value={editing ? form.phone : profile.phone} onChange={handleChange} disabled={!editing} />
               </div>
-              <div className="flex gap-3 mt-4">
-                <Button id="profile-save" type="submit" className="bg-blue-700 text-white hover:bg-blue-800">Save</Button>
-                <Button id="profile-cancel" variant="outline" type="button" onClick={handleCancel}>Cancel</Button>
+              <div>
+                <Label htmlFor="profile-dob">Date of Birth</Label>
+                <Input id="profile-dob" name="dob" type="date" value={editing ? form.dob : profile.dob} onChange={handleChange} disabled={!editing} />
+              </div>
+              <div>
+                <Label htmlFor="profile-address">Address</Label>
+                <Input id="profile-address" name="address" value={editing ? form.address : profile.address} onChange={handleChange} disabled={!editing} />
               </div>
             </form>
-          ) : (
-            <div className="space-y-4 mt-3">
-              <div>
-                <span className="block text-slate-600 font-medium">Name</span>
-                <span className="text-lg">{form.name}</span>
-              </div>
-              <div>
-                <span className="block text-slate-600 font-medium">Email</span>
-                <span>{form.email}</span>
-              </div>
-              <div>
-                <span className="block text-slate-600 font-medium">Phone</span>
-                <span>{form.phone}</span>
-              </div>
-              <Button id="profile-edit" onClick={handleEdit} className="mt-2 bg-blue-700 text-white hover:bg-blue-800">Edit Profile</Button>
+            <div className="mt-6 flex gap-4">
+              {!editing && (
+                <Button id="profile-edit-btn" onClick={() => setEditing(true)} type="button">Edit</Button>
+              )}
+              {editing && (
+                <>
+                  <Button id="profile-save-btn" onClick={handleSave} type="button">Save</Button>
+                  <Button id="profile-cancel-btn" variant="outline" onClick={() => { setEditing(false); setForm(profile) }} type="button">Cancel</Button>
+                </>
+              )}
             </div>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
     </div>
   )
 }
