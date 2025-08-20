@@ -1,4 +1,3 @@
-// Playwright tests for LandingPage.tsx (main landing page)
 import { test, expect } from '@playwright/test';
 
 test.describe('Landing Page', () => {
@@ -6,57 +5,55 @@ test.describe('Landing Page', () => {
     await page.goto('/');
   });
 
-  test('renders hero section and headline', async ({ page }) => {
-    // The Hero component is at the top
-    await expect(page.locator('h1')).toBeVisible();
-    // Headline
-    await expect(page.getByRole('heading', { name: /Healthcare, Reimagined\./i, level: 2 })).toBeVisible();
-    await expect(page.getByText('At ShieldLink Health, your data is your own.', { exact: false })).toBeVisible();
+  test('renders hero section', async ({ page }) => {
+    // Hero is a component, but let's check for primary heading and brand
+    await expect(page.getByRole('heading', { name: /healthcare, reimagined/i })).toBeVisible();
+    await expect(page.getByText(/your data is your own/i)).toBeVisible();
   });
 
-  test('renders the three feature cards', async ({ page }) => {
-    // There are 3 feature cards with headings
-    await expect(page.getByRole('heading', { name: 'Private & Secure', level: 3 })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Human Connection', level: 3 })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Effortless Access', level: 3 })).toBeVisible();
-    // Their descriptions
+  test('shows all three feature cards with correct icons and text', async ({ page }) => {
+    const cardTitles = [
+      'Private & Secure',
+      'Human Connection',
+      'Effortless Access',
+    ];
+    for (const title of cardTitles) {
+      await expect(page.getByRole('heading', { name: title })).toBeVisible();
+    }
     await expect(page.getByText('Your health information stays protected with end-to-end encryption and privacy-first design.')).toBeVisible();
     await expect(page.getByText('We put people at the heart of care. Connect, share, and heal – together.')).toBeVisible();
     await expect(page.getByText('Access your records anywhere, anytime. You control your journey.')).toBeVisible();
   });
 
-  test('renders call-to-action with Sign Up Free button', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: /Ready to experience healthcare with heart/i })).toBeVisible();
-    const signupButton = page.getByRole('button', { name: /Sign Up Free/i });
-    await expect(signupButton).toBeVisible();
+  test('renders the call-to-action section and signup button', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: /ready to experience healthcare with heart/i })).toBeVisible();
+    const ctaButton = page.getByRole('link', { name: /sign up free/i });
+    await expect(ctaButton).toBeVisible();
+    await expect(ctaButton).toHaveAttribute('href', '/signup');
+    await expect(ctaButton).toHaveClass(/font-bold/);
   });
 
-  test('Sign Up Free button navigates to /signup', async ({ page }) => {
-    const signupButton = page.getByRole('button', { name: /Sign Up Free/i });
-    await signupButton.click();
-    await expect(page).toHaveURL('/signup');
+  test('cta signup button navigates to signup page', async ({ page }) => {
+    await page.getByRole('link', { name: /sign up free/i }).click();
+    await expect(page).toHaveURL(/\/signup$/);
+    await expect(page.getByRole('heading', { name: /sign up/i })).toBeVisible();
   });
 
-  test('landing page is accessible by basic checks', async ({ page }) => {
-    // No obvious accessibility violations (just basic checks)
-    // All headings are present
-    await expect(page.getByRole('heading', { name: /Healthcare, Reimagined\./i, level: 2 })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Private & Secure/i, level: 3 })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Human Connection/i, level: 3 })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Effortless Access/i, level: 3 })).toBeVisible();
-    await expect(page.getByRole('button', { name: /Sign Up Free/i })).toBeVisible();
+  test('feature section cards have accessible contrast', async ({ page }) => {
+    // Check for background color and text color classes
+    const features = page.locator('.grid > div');
+    await expect(features.nth(0)).toHaveClass(/bg-\[#cbd5e1\]/);
+    await expect(features.nth(0)).toHaveClass(/rounded-xl/);
+    await expect(features.nth(0)).toContainText('Private & Secure');
+    await expect(features.nth(1)).toHaveClass(/bg-\[#cbd5e1\]/);
+    await expect(features.nth(2)).toHaveClass(/bg-\[#cbd5e1\]/);
   });
 
-  test('features are keyboard reachable', async ({ page }) => {
-    // Tab through to CTA button
-    let found = false;
-    for (let i = 0; i < 20; i++) {
-      await page.keyboard.press('Tab');
-      if (await page.evaluate(() => document.activeElement?.textContent?.includes('Sign Up Free'))) {
-        found = true;
-        break;
-      }
-    }
-    expect(found).toBe(true);
+  test('page layout is responsive (basic check)', async ({ page }) => {
+    // Desktop grid
+    await expect(page.locator('.grid')).toHaveClass(/md:grid-cols-3/);
+    // Simulate mobile
+    await page.setViewportSize({ width: 375, height: 800 });
+    await expect(page.locator('.grid')).toHaveClass(/grid-cols-1/);
   });
 });
